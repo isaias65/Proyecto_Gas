@@ -1,70 +1,79 @@
-
+import { useState } from "react";
 import ButtonPrimary from "../components/common/button/ButtonPrimary";
 import InputEmail from "../components/common/input/InputEmail";
 import InputPassword from "../components/common/input/InputPassword";
 import useAuth from "../hooks/auth/useAuth";
 import useForm from "../hooks/common/useForm";
+import { authValidation, IAuthErrors } from "../utils/auth.validation";
 
 const Login = () => {
-  const {formValues, onInputChange} = useForm({email: '', password: ''});
-  const { login, loading } = useAuth();
+    const { formValues, onInputChange } = useForm({ email: "", password: "" });
+    const { login, loading } = useAuth();
+    const [errors, setErrors] = useState<IAuthErrors>({});
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    await login(formValues.email, formValues.password);
-  };
-  return (
-    <div className="flex h-screen">
-      {/* Sección de la Imagen */}
-      <div className="hidden md:block w-3/5 p-3">
-        <img
-          src="./img-japan.jpg"
-          alt="Imagen de login"
-          className="w-full h-full object-cover rounded-2xl "
-        />
-      </div>
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const validationErrors = authValidation(formValues);
+        setErrors(validationErrors);
 
-      <div className="w-full md:w-2/5 flex items-center justify-center p-8">
-        <div className="max-w-sm w-full">
-          <h2 className="text-3xl font-semibold text-gray-800">Bienvenido</h2>
-          <p className="text-gray-500 mb-6">Inicia sesión en tu cuenta.</p>
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-            <InputEmail 
-              label="Correo electrónico"
-              placeholder="Ingresa tu correo electrónico"
-              name="email" 
-              value={formValues.email} 
-              onChange={onInputChange}
-            />
-            <InputPassword 
-              label="Contraseña"
-              placeholder="Ingresa tu contraseña"
-              name="password"
-              value={formValues.password}
-              onChange={onInputChange}
-            />
-            {/* Olvidaste tu contraseña */}
-            <div className="text-right mb-6">
-              <a href="#" className="text-sm text-blue-600 hover:underline">
-                ¿Olvidaste tu contraseña?
-              </a>
+        if (Object.keys(validationErrors).length > 0) return;
+
+        await login(formValues.email, formValues.password);
+    };
+    return (
+        <div className="flex h-screen">
+            {/* Sección de la Imagen */}
+            <div className="hidden w-3/5 p-3 md:block">
+                <img
+                    src="https://i.pinimg.com/736x/1c/87/6b/1c876bd33fb8ae8870c7523d07fffae5.jpg"
+                    alt="Imagen de login"
+                    className="h-full w-full rounded-2xl object-cover"
+                />
             </div>
 
-            {/* Botón de Login */}
-            <ButtonPrimary disabled={loading} text={loading ? "Cargando..." : "Iniciar sesión"} />
+            <div className="flex w-full items-center justify-center p-8 md:w-2/5">
+                <div className="w-full max-w-sm">
+                    <h2 className="text-3xl font-semibold text-gray-800">Bienvenido</h2>
+                    <p className="mb-6 text-gray-500">Inicia sesión en tu cuenta.</p>
+                    <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+                        <InputEmail
+                            label="Correo electrónico"
+                            placeholder="Ingresa tu correo electrónico"
+                            name="email"
+                            value={formValues.email}
+                            onChange={onInputChange}
+                            error={errors.email}
+                        />
+                        <InputPassword
+                            label="Contraseña"
+                            placeholder="Ingresa tu contraseña"
+                            name="password"
+                            value={formValues.password}
+                            onChange={onInputChange}
+                            error={errors.password}
+                        />
+                        {/* Olvidaste tu contraseña */}
+                        <div className="mb-6 text-right">
+                            <a href="#" className="text-sm text-blue-600 hover:underline">
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        </div>
 
-            {/* Registrarse */}
-            <p className="text-sm text-gray-600 text-center mt-4">
-              ¿No tienes una cuenta?{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Regístrate aquí
-              </a>
-            </p>
-          </form>
+                        {/* Botón de Login */}
+                        <ButtonPrimary disabled={loading} text={loading ? "Cargando..." : "Iniciar sesión"} />
+
+                        {/* Registrarse */}
+                        <p className="mt-4 text-center text-sm text-gray-600">
+                            ¿No tienes una cuenta?{" "}
+                            <a href="#" className="text-blue-600 hover:underline">
+                                Regístrate aquí
+                            </a>
+                        </p>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
-}
+    );
+};
 
-export default Login
+export default Login;
