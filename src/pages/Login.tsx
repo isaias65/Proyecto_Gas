@@ -1,7 +1,18 @@
-import { useState } from "react"
+
+import ButtonPrimary from "../components/common/button/ButtonPrimary";
+import InputEmail from "../components/common/input/InputEmail";
+import InputPassword from "../components/common/input/InputPassword";
+import useAuth from "../hooks/auth/useAuth";
+import useForm from "../hooks/common/useForm";
 
 const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
+  const {formValues, onInputChange} = useForm({email: '', password: ''});
+  const { login, loading } = useAuth();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await login(formValues.email, formValues.password);
+  };
   return (
     <div className="flex h-screen">
       {/* Sección de la Imagen */}
@@ -13,73 +24,43 @@ const Login = () => {
         />
       </div>
 
-      {/* Sección del Formulario */}
       <div className="w-full md:w-2/5 flex items-center justify-center p-8">
         <div className="max-w-sm w-full">
-          {/* Título */}
           <h2 className="text-3xl font-semibold text-gray-800">Bienvenido</h2>
           <p className="text-gray-500 mb-6">Inicia sesión en tu cuenta.</p>
-
-          {/* Campo de Correo */}
-          <div className="relative mb-6">
-            <label className="block text-sm font-medium text-gray-700">
-              Correo Electrónico
-            </label>
-            <div className="flex items-center border-b-2 border-gray-300">
-              <img src="./icon-email.svg" alt="Correo" className="w-5 h-5 text-gray-500 mr-2" />
-              <input
-                type="email"
-                placeholder="Ingresa tu correo"
-                className="w-full p-2 focus:outline-none"
-              />
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <InputEmail 
+              label="Correo electrónico"
+              placeholder="Ingresa tu correo electrónico"
+              name="email" 
+              value={formValues.email} 
+              onChange={onInputChange}
+            />
+            <InputPassword 
+              label="Contraseña"
+              placeholder="Ingresa tu contraseña"
+              name="password"
+              value={formValues.password}
+              onChange={onInputChange}
+            />
+            {/* Olvidaste tu contraseña */}
+            <div className="text-right mb-6">
+              <a href="#" className="text-sm text-blue-600 hover:underline">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
-          </div>
 
-          {/* Campo de Contraseña */}
-          <div className="relative mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Contraseña
-            </label>
-            <div className="flex items-center border-b-2 border-gray-300">
-              <img src="./icon-lock.svg" alt="Contraseña" className="w-5 h-5 text-gray-500 mr-2" />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Ingresa tu contraseña"
-                className="w-full p-2 focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="ml-2 focus:outline-none"
-              >
-                <img
-                  src={showPassword ? "./icon-eyeOff.svg" : "./icon-eye.svg"}
-                  alt="Mostrar contraseña"
-                  className="w-5 h-5 text-gray-500"
-                />
-              </button>
-            </div>
-          </div>
+            {/* Botón de Login */}
+            <ButtonPrimary disabled={loading} text={loading ? "Cargando..." : "Iniciar sesión"} />
 
-          {/* Olvidaste tu contraseña */}
-          <div className="text-right mb-6">
-            <a href="#" className="text-sm text-blue-600 hover:underline">
-              ¿Olvidaste tu contraseña?
-            </a>
-          </div>
-
-          {/* Botón de Login */}
-          <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-            Iniciar sesión
-          </button>
-
-          {/* Registrarse */}
-          <p className="text-sm text-gray-600 text-center mt-4">
-            ¿No tienes una cuenta?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Regístrate aquí
-            </a>
-          </p>
+            {/* Registrarse */}
+            <p className="text-sm text-gray-600 text-center mt-4">
+              ¿No tienes una cuenta?{" "}
+              <a href="#" className="text-blue-600 hover:underline">
+                Regístrate aquí
+              </a>
+            </p>
+          </form>
         </div>
       </div>
     </div>
