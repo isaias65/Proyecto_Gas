@@ -5,9 +5,10 @@ import InputPassword from "../components/common/input/InputPassword";
 import useAuth from "../hooks/auth/useAuth";
 import useForm from "../hooks/common/useForm";
 import { authValidation, IAuthErrors } from "../utils/auth.validation";
+import { IUserAuth } from "../types/userTypes";
 
 const Login = () => {
-    const { formValues, onInputChange } = useForm({ email: "", password: "" });
+    const { formValues, onInputChange } = useForm<IUserAuth>({ email: "", password: "" });
     const { login, loading } = useAuth();
     const [errors, setErrors] = useState<IAuthErrors>({});
 
