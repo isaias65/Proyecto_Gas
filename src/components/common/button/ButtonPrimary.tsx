@@ -7,7 +7,7 @@ interface ButtonPrimaryProps {
 const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({ text, disabled, onClick }) => {
   return (
     <button
-      className={`w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed`}
+      className={`w-full bg-buttom-primary text-white py-3 rounded-2xl transition duration-300 ease-in-out  hover:bg-buttom-hover disabled:bg-gray-400 disabled:cursor-not-allowed`}
       onClick={onClick}
       disabled={disabled}
     >
