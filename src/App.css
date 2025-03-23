@@ -1,12 +1,7 @@
 @import "tailwindcss";
 @theme {
-    --text-color-titulo: #212730;
-    --text-color-subtitulo: #323c48;
-    --color-input-active: #212730;
-    --color-buttom-primary: #212730;
-    --color-buttom-hover: #323c48;
 
-    --color-primary-black: #161925;
+    --primary-black: #161925;
 
     /* --color-primary-black-50: #f5f6fa;
     --color-primary-black-100:#eaecf4;
