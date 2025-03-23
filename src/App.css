@@ -1,8 +1,64 @@
 @import "tailwindcss";
-@theme{
+@theme {
     --text-color-titulo: #212730;
     --text-color-subtitulo: #323c48;
     --color-input-active: #212730;
     --color-buttom-primary: #212730;
     --color-buttom-hover: #323c48;
+
+    --color-primary-black: #161925;
+
+    /* --color-primary-black-50: #f5f6fa;
+    --color-primary-black-100:#eaecf4;
+    --color-primary-black-200: #d1d7e6;
+    --color-primary-black-300: #a8b4d1;
+    --color-primary-black-400: #7a8cb6;
+    --color-primary-black-500: #596d9e;
+    --color-primary-black-600: #455584;
+    --color-primary-black-700: #39456b;
+    --color-primary-black-800: #323c5a;
+    --color-primary-black-900: #2d344d;
+    --color-primary-black-950: #161925;
+
+    --color-primary-project-50: #f2f4fb;
+    --color-primary-project-200: #e8ebf7;
+    --color-primary-project-300: #d5daf0;
+    --color-primary-project-400: #9fa5da;
+    --color-primary-project-500: #9395d3;
+    --color-primary-project-600: #716dbe; /*color boton*/
+    /* --color-primary-project-700: #615ca6;
+    --color-primary-project-800: #4f4d86;
+    --color-primary-project-900: #44436c;
+    --color-primary-project-950: #28273f; */
+
+    /* Colores primary-black */
+    --color-primary-fondo: #f5f6fa;
+    --color-primary-black-hue: 227; 
+    --color-primary-black-50: hsl(var(--color-primary-black-hue), 33%, 97%);
+    --color-primary-black-100: hsl(var(--color-primary-black-hue), 32%, 93%);
+    --color-primary-black-200: hsl(var(--color-primary-black-hue), 34%, 85%);
+    --color-primary-black-300: hsl(var(--color-primary-black-hue), 32%, 74%);
+    --color-primary-black-400: hsl(var(--color-primary-black-hue), 29%, 61%);
+    --color-primary-black-500: hsl(var(--color-primary-black-hue), 27%, 50%);
+    --color-primary-black-600: hsl(var(--color-primary-black-hue), 30%, 41%);
+    --color-primary-black-700: hsl(var(--color-primary-black-hue), 31%, 34%);
+    --color-primary-black-800: hsl(var(--color-primary-black-hue), 28%, 30%);
+    --color-primary-black-900: hsl(var(--color-primary-black-hue), 27%, 27%);
+    --color-primary-black-950: hsl(var(--color-primary-black-hue), 19%, 11%);
+
+
+    /* Colores primary-project */
+    --color-primary-project-hue: 238;
+
+    --color-primary-project-50: hsl(var(--color-primary-project-hue), 41%, 97%);
+    --color-primary-project-200: hsl(var(--color-primary-project-hue), 40%, 92%);
+    --color-primary-project-300: hsl(var(--color-primary-project-hue), 41%, 86%);
+    --color-primary-project-400: hsl(var(--color-primary-project-hue), 41%, 72%);
+    --color-primary-project-500: hsl(var(--color-primary-project-hue), 38%, 70%);
+    --color-primary-project-600: hsl(var(--color-primary-project-hue), 40%, 58%); /* Color botón */
+    --color-primary-project-700: hsl(var(--color-primary-project-hue), 30%, 50%);
+    --color-primary-project-800: hsl(var(--color-primary-project-hue), 28%, 42%);
+    --color-primary-project-900: hsl(var(--color-primary-project-hue), 24%, 34%);
+    --color-primary-project-950: hsl(var(--color-primary-project-hue), 21%, 18%);
+
 }

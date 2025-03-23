@@ -1,19 +1,19 @@
 interface ButtonPrimaryProps {
-  text: string;
-  disabled?: boolean;
-  onClick?: () => void;
+    text: string;
+    disabled?: boolean;
+    onClick?: () => void;
 }
 
 const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({ text, disabled, onClick }) => {
-  return (
-    <button
-      className={`w-full bg-buttom-primary text-white py-3 rounded-2xl transition duration-300 ease-in-out  hover:bg-buttom-hover disabled:bg-gray-400 disabled:cursor-not-allowed`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {text}
-    </button>
-  );
+    return (
+        <button
+            className={`bg-primary-project-700 hover:bg-primary-project-800 disabled:bg-primary-project-500 w-full rounded-2xl py-3 text-white transition duration-300 ease-in-out disabled:cursor-not-allowed text-lg`}
+            onClick={onClick}
+            disabled={disabled}
+        >
+            {text}
+        </button>
+    );
 };
 
-export default ButtonPrimary
+export default ButtonPrimary;

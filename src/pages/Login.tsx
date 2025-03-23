@@ -32,11 +32,14 @@ const Login = () => {
                 />
             </div>
 
-            <div className="flex w-full items-center justify-center p-8 md:w-2/5">
-                <div className="flex flex-col gap-9 w-full max-w-md">
-                    <div className="flex flex-col gap-1.5 justify-start">
-                        <h2 className="text-3xl font-semibold text-titulo">Potencia tus Ventas</h2>
-                        <p className="text-base text-subtitulo">Accede a tu cuenta y gestiona tu negocio con facilidad.</p>
+            <div className="relative flex w-full flex-col items-center justify-center p-8 md:w-2/5">
+                <div className="absolute top-0 flex w-full justify-center p-8 md:justify-end">
+                    <img src="/public/img/logoVixlia_black.png" alt="Logo de la empresa" className="w-44 md:w-32" />
+                </div>
+                <div className="flex w-full max-w-md flex-col gap-9">
+                    <div className="flex flex-col items-center justify-center gap-1.5 md:items-start">
+                        <h2 className="text-primary-black-950 text-center text-3xl font-semibold md:text-left">Potencia tus Ventas</h2>
+                        <p className="text-primary-black-800 text-center text-base md:text-left">Accede a tu cuenta y gestiona tu negocio con facilidad.</p>
                     </div>
                     <form className="flex flex-col gap-14" onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-7">
@@ -59,7 +62,6 @@ const Login = () => {
                         </div>
                         {/* Botón de Login */}
                         <ButtonPrimary disabled={loading} text={loading ? "Cargando..." : "Iniciar sesión"} />
-
                     </form>
                 </div>
             </div>
