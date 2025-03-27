@@ -1,26 +1,11 @@
-import { useState } from "react";
 import ButtonPrimary from "../components/common/button/ButtonPrimary";
 import InputEmail from "../components/common/input/InputEmail";
 import InputPassword from "../components/common/input/InputPassword";
-import useAuth from "../hooks/auth/useAuth";
-import useForm from "../hooks/common/useForm";
-import { authValidation, IAuthErrors } from "../utils/auth.validation";
-import { IUserAuth } from "../types/userTypes";
+import { useAuthHook } from "../hooks/auth/useAuth";
 
 const Login = () => {
-    const { formValues, onInputChange } = useForm<IUserAuth>({ email: "", password: "" });
-    const { login, loading } = useAuth();
-    const [errors, setErrors] = useState<IAuthErrors>({});
+    const { handleSubmit, formValues, onInputChange, loading, errors, messageError } = useAuthHook();
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        const validationErrors = authValidation(formValues);
-        setErrors(validationErrors);
-
-        if (Object.keys(validationErrors).length > 0) return;
-
-        await login(formValues.email, formValues.password);
-    };
     return (
         <div className="flex h-screen">
             {/* Sección de la Imagen */}
@@ -39,7 +24,9 @@ const Login = () => {
                 <div className="flex w-full max-w-md flex-col gap-9">
                     <div className="flex flex-col items-center justify-center gap-1.5 md:items-start">
                         <h2 className="text-primary-black-950 text-center text-3xl font-semibold md:text-left">Potencia tus Ventas</h2>
-                        <p className="text-primary-black-800 text-center text-base md:text-left">Accede a tu cuenta y gestiona tu negocio con facilidad.</p>
+                        <p className="text-primary-black-800 text-center text-base md:text-left">
+                            Accede a tu cuenta y gestiona tu negocio con facilidad.
+                        </p>
                     </div>
                     <form className="flex flex-col gap-14" onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-7">
@@ -62,6 +49,7 @@ const Login = () => {
                         </div>
                         {/* Botón de Login */}
                         <ButtonPrimary disabled={loading} text={loading ? "Cargando..." : "Iniciar sesión"} />
+                        {messageError && <p className="text-center text-sm text-red-600">{messageError}</p>}
                     </form>
                 </div>
             </div>

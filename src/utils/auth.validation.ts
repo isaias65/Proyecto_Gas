@@ -1,4 +1,4 @@
-import { IUserAuth } from "../types/userTypes";
+import { IAuth } from "../models/user/userModel";
 import { emailValidation } from "./validations/common/email.validation";
 import { passwordValidation } from "./validations/common/password.validation";
 
@@ -7,7 +7,7 @@ export interface IAuthErrors {
     password?: string;
 }
 
-export const authValidation = (data: IUserAuth): IAuthErrors => {
+export const authValidation = (data: IAuth): IAuthErrors => {
     let errors: IAuthErrors = {};
 
     if (data.email !== undefined) {

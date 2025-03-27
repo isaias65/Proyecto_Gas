@@ -1,52 +1,87 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { refreshUserData } from "../../services/auth/authService";
+import { AuthUser, LoginResponse } from "../../models/auth/auth.model";
 
-interface AuthContextType {
-    user: UserData | null;
-    token: string | null;
-    login: (token: string, user: UserData) => void;
+interface AuthContextProps {
+    user: AuthUser | null;
+    login: (loginResponse: LoginResponse) => void;
     logout: () => void;
+    refreshUserData: () => Promise<void>;
 }
+// Crear el contexto (se inicializa con valores vacíos solo para la estructura)
+const AuthContext = createContext<AuthContextProps>({
+    user: null,
+    login: () => {},
+    logout: () => {},
+    refreshUserData: async () => {},
+});
 
-interface UserData {
-    name: string;
-    last_name: string;
-    email: string;
-    celular: string;
-}
+// Hook personalizado para usar el contexto
+export const useAuthContext = (): AuthContextProps => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth debe usarse dentro de un AuthProvider");
+    }
+    return context;
+};
 
-export const AuthContext = createContext<AuthContextType | null>(null);
-
+// Componente Provider que maneja el estado de autenticación
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<UserData | null>(null);
-    const [token, setToken] = useState<string | null>(null);
+    const [user, setUser] = useState<AuthUser | null>(null);
+    const sessionKey = "authUser"; // Clave en sessionStorage
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        // Revisar si hay sesión guardada
-        const savedUser = localStorage.getItem("user");
-        const savedToken = localStorage.getItem("token");
-
-        if (savedUser && savedToken) {
-            setUser(JSON.parse(savedUser));
-            setToken(savedToken);
+    // Función para iniciar sesión
+    const login = (loginResponse: LoginResponse) => {
+        if (!loginResponse || !loginResponse.token || !loginResponse.data) {
+            console.error("❌ Error: Respuesta de inicio de sesión inválida");
+            return;
         }
-    }, []);
-
-    const login = (token: string, user: UserData) => {
-        setUser(user);
-        setToken(token);
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("token", token);
+        const authUser: AuthUser = { ...loginResponse.data, token: loginResponse.token };
+        setUser(authUser);
+        sessionStorage.setItem(sessionKey, JSON.stringify(authUser));
+        navigate("/dashboard");
     };
 
+    // Función para cerrar sesión
     const logout = () => {
         setUser(null);
-        setToken(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+        sessionStorage.removeItem(sessionKey);
+        navigate("/login");
     };
 
+    // Función para actualizar los datos del usuario desde la API
+    const handleRefreshUserData = async () => {
+        try {
+            const updatedUser = await refreshUserData();
+            if (!updatedUser) {
+                console.warn("⚠️ No se pudo actualizar el usuario, cerrando sesión...");
+                logout();
+                return;
+            }
+            setUser(prevUser => prevUser ? { ...updatedUser, token: prevUser.token } : null);
+            sessionStorage.setItem(sessionKey, JSON.stringify({ ...updatedUser, token: user?.token || "" }));
+        } catch (error) {
+            console.error("❌ Error al actualizar los datos del usuario:", error);
+            logout();
+        }
+    };
+
+    // Efecto para recuperar la sesión cuando la página se recarga
+    useEffect(() => {
+        const storedUser = sessionStorage.getItem(sessionKey);
+        if (storedUser) {
+            const parsedUser: AuthUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            handleRefreshUserData(); // Actualiza la información llamando a la API
+        } else {
+            navigate("/login");
+        }
+    }, [navigate]);
+
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, refreshUserData: handleRefreshUserData }}>
             {children}
         </AuthContext.Provider>
     );

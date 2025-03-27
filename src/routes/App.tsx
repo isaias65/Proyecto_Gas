@@ -1,15 +1,21 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import '../App.css'
-import Login from '../pages/Login'
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { AuthProvider } from "../context/auth/AuthContext";
+import Login from "../pages/Login";
+import { DashBoard } from "../pages/DashBoard";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login />}/>
-      </Routes>
-    </BrowserRouter>
-  )
+    return (
+        <BrowserRouter> {/* <BrowserRouter> debe envolver todo */}
+            <AuthProvider> {/* Ahora `AuthProvider` está dentro del Router */}
+                <Routes>
+                    <Route path="/" element={<Navigate to="/login" />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dashboard" element={<DashBoard />} />
+                    <Route path="*" element={<Navigate to="/login" />} />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 
-export default App
+export default App;
