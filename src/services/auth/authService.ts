@@ -1,8 +1,8 @@
 import { SessionManager } from "../../utils/validations/sesionStorage/sessionStorageUtil";
 import { apiClient } from "../ApiService";
 import { AxiosError, AxiosResponse } from "axios";
-import {  LoginResponse } from "../../models/auth/auth.model";
-import { IAuth, UserData } from "../../models/user/userModel";
+import { LoginResponse, RefreshSesionAuth } from "../../models/auth/auth.model";
+import { IAuth } from "../../models/user/userModel";
 
 const authSession = new SessionManager<string>("token");
 
@@ -17,7 +17,7 @@ export const loginService = async (credentials: IAuth): Promise<LoginResponse> =
     }
 };
 
-export const refreshUserData = async (): Promise<UserData | null> => {
+export const refreshUserData = async (): Promise<RefreshSesionAuth | null> => {
     try {
         const token = authSession.get(); // 🔹 Obtener el token de sessionStorage
         if (!token) {
@@ -25,8 +25,13 @@ export const refreshUserData = async (): Promise<UserData | null> => {
             return null;
         }
 
-        const response: AxiosResponse<UserData> = await apiClient.get("/auth/me");
-        return response.data;
+        const response: AxiosResponse<RefreshSesionAuth> = await apiClient.get("/auth");
+        authSession.save(response.data.token);
+        return {
+            message: response.data.message,
+            token: response.data.token,
+            data: response.data.data,
+        };
     } catch (error) {
         console.error("❌ Error al actualizar los datos del usuario:", error);
         return null;

@@ -11,7 +11,7 @@ const Login = () => {
             {/* Sección de la Imagen */}
             <div className="hidden w-3/5 p-3 md:block">
                 <img
-                    src="https://i.pinimg.com/736x/1c/87/6b/1c876bd33fb8ae8870c7523d07fffae5.jpg"
+                    src="./img/publicidad.jpg"
                     alt="Imagen de login"
                     className="h-full w-full rounded-2xl object-cover"
                 />

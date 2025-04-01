@@ -54,14 +54,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Función para actualizar los datos del usuario desde la API
     const handleRefreshUserData = async () => {
         try {
-            const updatedUser = await refreshUserData();
-            if (!updatedUser) {
+            const response = await refreshUserData();
+            if (!response) {
                 console.warn("⚠️ No se pudo actualizar el usuario, cerrando sesión...");
                 logout();
                 return;
             }
-            setUser(prevUser => prevUser ? { ...updatedUser, token: prevUser.token } : null);
-            sessionStorage.setItem(sessionKey, JSON.stringify({ ...updatedUser, token: user?.token || "" }));
+            const updatedUser: AuthUser = {
+                ...response.data, // Datos del usuario (name, last_name, phone, email, estado, rol)
+                token: response.token // Nuevo token actualizado
+            };
+
+            setUser(updatedUser);
+            sessionStorage.setItem(sessionKey, JSON.stringify(updatedUser));
         } catch (error) {
             console.error("❌ Error al actualizar los datos del usuario:", error);
             logout();
@@ -73,12 +78,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const storedUser = sessionStorage.getItem(sessionKey);
         if (storedUser) {
             const parsedUser: AuthUser = JSON.parse(storedUser);
+            console.log(parsedUser);
             setUser(parsedUser);
-            handleRefreshUserData(); // Actualiza la información llamando a la API
+    
+            // Intentar refrescar los datos, pero sin hacer logout inmediato si falla
+            handleRefreshUserData().catch((error) => {
+                console.error("⚠️ No se pudo actualizar el usuario, pero mantenemos la sesión:", error);
+            });
         } else {
-            navigate("/login");
+            // Evitar una redirección innecesaria si el usuario ya está en /login
+            if (window.location.pathname !== "/login") {
+                navigate("/login");
+            }
         }
-    }, [navigate]);
+    }, []);
 
     return (
         <AuthContext.Provider value={{ user, login, logout, refreshUserData: handleRefreshUserData }}>
